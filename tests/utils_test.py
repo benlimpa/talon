@@ -2,7 +2,7 @@
 
 from __future__ import absolute_import
 
-import cchardet
+import chardet
 import six
 
 from talon import utils as u
@@ -47,21 +47,21 @@ def test_quick_detect_encoding():
     eq_('utf-8', u.quick_detect_encoding(u'привет'.encode('utf8')).lower())
 
 
-@patch.object(cchardet, 'detect')
+@patch.object(chardet, 'detect')
 @patch.object(u, 'detect_encoding')
-def test_quick_detect_encoding_edge_cases(detect_encoding, cchardet_detect):
-    cchardet_detect.return_value = {'encoding': 'ascii'}
+def test_quick_detect_encoding_edge_cases(detect_encoding, chardet_detect):
+    chardet_detect.return_value = {'encoding': 'ascii'}
     eq_('ascii', u.quick_detect_encoding(b"qwe"))
-    cchardet_detect.assert_called_once_with(b"qwe")
+    chardet_detect.assert_called_once_with(b"qwe")
 
     # fallback to detect_encoding
-    cchardet_detect.return_value = {}
+    chardet_detect.return_value = {}
     detect_encoding.return_value = 'utf-8'
     eq_('utf-8', u.quick_detect_encoding(b"qwe"))
 
     # exception
     detect_encoding.reset_mock()
-    cchardet_detect.side_effect = Exception()
+    chardet_detect.side_effect = Exception()
     detect_encoding.return_value = 'utf-8'
     eq_('utf-8', u.quick_detect_encoding(b"qwe"))
     ok_(detect_encoding.called)
