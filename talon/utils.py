@@ -4,7 +4,6 @@ from __future__ import absolute_import
 
 from random import shuffle
 
-import cchardet
 import chardet
 import html5lib
 import regex as re
@@ -74,11 +73,11 @@ def quick_detect_encoding(string):
     """
     Tries to detect the encoding of the passed string.
 
-    Uses cchardet. Fallbacks to detect_encoding.
+    Uses chardet. Fallbacks to detect_encoding.
     """
     assert isinstance(string, bytes)
     try:
-        detected = cchardet.detect(string)
+        detected = chardet.detect(string)
         if detected:
             return detected.get('encoding') or detect_encoding(string)
     except Exception as e:
